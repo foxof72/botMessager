@@ -8,7 +8,7 @@ auth.set_access_token(Keys.accessToken, Keys.accessTokenSecret)
 
 # Spinning Up
 
-
+errorCount = 0  # number of errors
 user = ""  # add DM recipient here
 api = tweepy.API(auth)
 print "Current user is: " + str(api.me().name)
@@ -30,15 +30,15 @@ def getMostRecent(api, operatedOn):
     return mostRecentID
 
 
-def sendNightlyDM(api, numberOfTweetsMade, numberOfErrors, numberOfFollowers, lastFollowers):
+def sendNightlyDM(api, numberOfTweetsMade, errorCount, numberOfFollowers, lastFollowers):
     dmBody = file.open("dmBody.txt", 'r+')
     dmBody.write("Good evening sir, " + '\n')
     dmBody.write("Today I tweeted " + str(numberOfTweetsMade) + " times." + '\n')
     grossFollowChange = numberOfFollowers - lastFollowers
-    if numberOfErrors == 0:
+    if errorCount == 0:
         dmBody.write("I'm pleased to report I encountered zero errors.")
     else:
-        dmBody.write("I encountered " + str(numberOfErrors + " errors today.  Please see my log for more information." + '\n'))
+        dmBody.write("I encountered " + str(errorCount + " errors today.  Please see my log for more information." + '\n'))
     dmBody.write("I currently have " + str(numberOfFollowers) + "followers." )
     if numberOfFollowers > lastFollowers:
         dmBody.write("I'm pleased to report that I gained " + str(grossFollowChange) + " today+ + '\n")
@@ -51,7 +51,11 @@ def sendNightlyDM(api, numberOfTweetsMade, numberOfErrors, numberOfFollowers, la
     dmBody.close()
 
 
-def sendErrorDM(api, errorMessage):  # api is the api being used, and error message is the exception caught
+def sendErrorDM(api, errorMessage, errorCount):  # api is the api being used, and error message is the exception caught
+    activationTime = time.time()
+    if time.time() - activationTime > 86400:  # basically, if the time seperating the two is greater than 1 day
+        errorCount = 0
+    errorCount += 1
     greeting = "Hello, I've encountered an error."
     error = "The error is: " + str(errorMessage) + "."
     errorTime = "The error was encountered at " + str(time.strftime("%a %b %Y %I:%M:%S %p %z", time.localtime())) + "."
