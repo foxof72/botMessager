@@ -25,9 +25,11 @@
     <li>Add it to your twitter bot</li>
     <li>Naviagte to the directory where you've add Bot Messenger to your project</li>
     <li>Create a new python file called <code>keys.py</code></li> (case matters, see below for a copyable template)
+    <li>Add your keys/tokens, as well as the user you want to have your bot DM.  This is done this way to protect the privacy
+    of both your keys/tokens and the username of the recepicant of the messages.</li>
     <li>Add the import statement to your bot:
         <code>import botMessenger</code></li>
-    <li></li>
+    <li>Add in the functions wherever you see fit!</li>
 </ol>
 
 <h2><code>keys.py</code> template</h2>
@@ -36,7 +38,14 @@
     consumerKeySecret = "Your secret consumer key here" <br />
     accessToken = "Your access token here" <br />
     accessTokenSecret = "Your secret access token here" <br />
+    user = "user to get DMs here (exampe: @you)"
 </code></pre>
 <p>If your using github or another VCS software, make sure you don't put these keys on your repo.  Keep them secret!</p>
 
-Made with love in Venice, California
+<h2>A warning</h2>
+<p>Please don't use this code in any malicous ways, such as to DM spam users.  Dont't send the DMs to anyone who hasn't
+expressly consented to recieve them.  Doing so is a violation of Twitter's rules, and could result in punishment.  Curious
+if you're breaking the rules?  Check out<a href = "https://support.twitter.com/articles/76915">Twitter's rules</a>on the
+subject.  Basically, be nice and respectful.</p>
+
+<h6>Made with love in Venice, California❤</h6>
