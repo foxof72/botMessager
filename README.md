@@ -31,12 +31,12 @@
 </ol>
 
 <h2><code>keys.py</code> template</h2>
-<code> class Keys: <br />
+<pre><code> class Keys: <br />
     consumerKey = "Your consumer key here" <br />
     consumerKeySecret = "Your secret consumer key here" <br />
     accessToken = "Your access token here" <br />
     accessTokenSecret = "Your secret access token here" <br />
-</code>
+</code></pre>
 <p>If your using github or another VCS software, make sure you don't put these keys on your repo.  Keep them secret!</p>
 
 Made with love in Venice, California
