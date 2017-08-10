@@ -45,7 +45,7 @@ while True:  # this is the "forever" loop<br />
     errorCount, tweetCount, dailyFlag = dailySetup(activationTime, dailyFlag, errorCount, tweetCount)
     ...Your code here...</code></pre>
 <p>If your using github or another VCS software, make sure you don't put these keys on your repo.  Keep them secret!
-The <code>initialSetup function</code> gets the time the program is started (for timekeeping purposes), and declares
+The <code>initialSetup</code> function gets the time the program is started (for timekeeping purposes), and declares
 and initializes several other variables to zero for use.   The <code>dailySetup</code> function updates these values
 everyday, at the hour specified by the variable <code>activationTime</code> (24 hour clock, within a +/- one hour range).</p>
 
