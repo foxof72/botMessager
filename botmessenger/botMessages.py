@@ -1,34 +1,36 @@
 import tweepy  # what in the sweet christmas causes this error
-import time
 from keys import Keys
+from botFunctions import *
 
 auth = tweepy.OAuthHandler(Keys.consumerKey, Keys.consumerKeySecret)
 auth.set_access_token(Keys.accessToken, Keys.accessTokenSecret)
 
 # Spinning Up
 
-errorCount = 0  # number of errors
 api = tweepy.API(auth)
 print "Current user is: " + str(api.me().name)
 
 
-# This gets the ID of a tweet
-def getID(status):
-    status = str(status)
-    idList = status.split('id=')
-    listOfMostlyTrash = idList[2].split(',')
-    return listOfMostlyTrash[0]
+# first time setup, to be called outside of a "forever" loop
+def initialSetup(api):
+    dailyFlag = time.time()
+    errorCount, tweetCount = 0, 0
+    followers = api.followers(api.me().name)
+    return errorCount, tweetCount, dailyFlag, followers
 
 
-# Retrieving most recent tweet to determine if action must be taken
-def getMostRecent(api, operatedOn):
-    mostRecent = api.user_timeline(operatedOn)
-    entireTweet = str(mostRecent[0])  # this includes everything, not just text
-    mostRecentID = getID(entireTweet)
-    return mostRecentID
+# set needed variables for running
+def dailySetup(activationTime, dailyFlag, errorCount, tweetCount):
+    currentTime = hourGetter()
+    if (time.time() - dailyFlag > 86400) and (currentTime + 1 == activationTime) or (currentTime - 1 ==activationTime):
+        errorCount = 0
+        tweetCount = 0
+        dailyFlag = time.time()
+    return errorCount, tweetCount, dailyFlag
 
 
-def sendNightlyDM(api, numberOfTweetsMade, errorCount, numberOfFollowers, lastFollowers):
+# Send nightly DM to bot manager specified by user parameter
+def sendNightlyDM(api, numberOfTweetsMade, errorCount, numberOfFollowers, lastFollowers, user):
     dmBody = file.open("dmBody.txt", 'r+')
     dmBody.write("Hello, " + '\n')
     dmBody.write("Today I tweeted " + str(numberOfTweetsMade) + " times." + '\n')
@@ -37,7 +39,7 @@ def sendNightlyDM(api, numberOfTweetsMade, errorCount, numberOfFollowers, lastFo
         dmBody.write("I'm pleased to report I encountered zero errors.")
     else:
         dmBody.write("I encountered " + str(errorCount + " errors today.  Please see my log for more information." + '\n'))
-    dmBody.write("I currently have " + str(numberOfFollowers) + "followers." )
+    dmBody.write("I currently have " + str(numberOfFollowers) + "followers.")
     if numberOfFollowers > lastFollowers:
         dmBody.write("I'm pleased to report that I gained " + str(grossFollowChange) + " today+ + '\n")
     if numberOfFollowers < lastFollowers:
@@ -45,11 +47,11 @@ def sendNightlyDM(api, numberOfTweetsMade, errorCount, numberOfFollowers, lastFo
     else:
         dmBody.write("I had no change in my follower count today." + '\n')
     dmBody.write("That is all for today, sir.  Please consult my log for more detail and have a good evening.")
-    api.send_direct_message(Keys.user, dmBody.read())
+    api.send_direct_message(user, dmBody.read())
     dmBody.close()
 
 
-def sendErrorDM(api, errorMessage, errorCount):  # api is the api being used, and error message is the exception caught
+def sendErrorDM(api, errorMessage, errorCount, user):  # api is the api being used, and error message is the exception caught
     activationTime = time.time()
     if time.time() - activationTime > 86400:  # basically, if the time seperating the two is greater than 1 day
         errorCount = 0
@@ -58,5 +60,5 @@ def sendErrorDM(api, errorMessage, errorCount):  # api is the api being used, an
     error = "The error is: " + str(errorMessage) + "."
     errorTime = "The error was encountered at " + str(time.strftime("%a %b %Y %I:%M:%S %p %z", time.localtime())) + "."
     dmBody = greeting + '\n' + error + '\n' + errorTime
-    api.send_direct_message(Keys.user, dmBody)
+    api.send_direct_message(user, dmBody)
 
