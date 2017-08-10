@@ -13,7 +13,7 @@
 <p>Bot Messenger is designed to work with your current twitter bot.  You'll need a bot already working to use it, using the
     tweepy library in Python.  So before you can use Bot Messenger, make sure you have the following:</p>
 <ul>
-    <li> A twitter bot, built in Python</li>
+    <li> A twitter bot, built in Python with the Tweepy Library</li>
     <li>The keys for your twitter bot, both consumer and access (keep these secret!)</li>
     <li>Stoke!</li>
 </ul>
