@@ -60,7 +60,7 @@ def sendNightlyDM(api, info, user):
 
 def sendErrorDM(api, info, user, errorMessage):  # api is the api being used, and error message is the exception caught
     activationTime = time.time()
-    if time.time() - activationTime > 86400:  # basically, if the time seperating the two is greater than 1 day
+    if time.time() - activationTime > 86400:  # basically, if the time separating the two is greater than 1 day
         info.errorCount = 0
     info.errorCount += 1
     greeting = "Hello, I've encountered an error."
