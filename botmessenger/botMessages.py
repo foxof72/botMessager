@@ -14,12 +14,7 @@ print "Current user is: " + str(api.me().name)
 
 # first time setup, to be called outside of a "forever" loop
 def initialSetup(api, user):
-    info = dailyInfo.DailyInfo()
-    info.dailyFlag = time.time()
-    info.errorCount, info.tweetCount = 0, 0
-    info.oldFollowers = api.followers(api.me().name)
-    info.newFollowers = 0
-    info.user = user
+    info = dailyInfo.DailyInfo(time.time(), 0, 0, api.followers(api.me().name), 0, user)
     return info
 
 
